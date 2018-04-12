@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
             }
-            //change for github
         });
 
         // Enable Send button when there's text to send (don't want store empty object on DB)
