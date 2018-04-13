@@ -31,9 +31,9 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
 
         boolean isPhoto = message.getPhotoUrl() != null;
         if (isPhoto) {
-            messageTextView.setVisibility(View.GONE);
-            photoImageView.setVisibility(View.VISIBLE);
-            Glide.with(photoImageView.getContext())
+            messageTextView.setVisibility(View.GONE); //not show textMessage
+            photoImageView.setVisibility(View.VISIBLE);// show photoImageView
+            Glide.with(photoImageView.getContext()) //Glide is an Image Loader Library recomended by Google
                     .load(message.getPhotoUrl())
                     .into(photoImageView);
         } else {

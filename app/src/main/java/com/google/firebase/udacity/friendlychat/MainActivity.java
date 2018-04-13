@@ -35,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -44,6 +45,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -205,6 +207,28 @@ public class MainActivity extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             StorageReference photoRef = mChatPhotosStorageReference.child(selectedImageUri.getLastPathSegment());
             //Example: content://local_images/foo/sea   --> selectedImageUri.getLastPathSegment = sea
+
+            //UPLOAD file to Fiebase Storage
+            photoRef.putFile(selectedImageUri) //the putFile method returns an UploadTask object, and we’ll need to call addOnSuccessListener to attach a listener where we’ll send the photo a message.
+                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // When the image has successfully uploaded, we get its download URL
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                    // Set the download URL to the message box, so that the user can send it to the database
+                    FriendlyMessage friendlyMessage = new FriendlyMessage(null, mUsername, downloadUrl.toString());
+                    mMessagesDatabaseReference.push().setValue(friendlyMessage);
+                }
+            });
+
+
+
+
+
+
+
+
         }
     }
 
